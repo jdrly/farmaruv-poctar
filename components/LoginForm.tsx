@@ -86,19 +86,15 @@ export function LoginForm({
           </form>
           <div className="bg-muted relative hidden md:block">
             <Image
-              src="/farmaruvpoctar_loginbg.webp"
-              width={1024}
-              height={1024}
-              alt="Image"
+              src="/login_bg_fp.webp"
+              width={1000}
+              height={667}
+              alt="Login image Farmářův počtář"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
             />
           </div>
         </CardContent>
       </Card>
-      <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-        {t.common.termsAgreement} <a href="#">{t.common.termsOfService}</a>{" "}
-        {t.common.and} <a href="#">{t.common.privacyPolicy}</a>.
-      </div>
     </div>
   );
 }

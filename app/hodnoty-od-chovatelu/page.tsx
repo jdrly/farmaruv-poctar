@@ -21,13 +21,13 @@ export default function page() {
             <span className="font-semibold">Roční náklady na pořízení zvířat:</span>
             Nejčastěji uváděnou odpovědí bylo 3001 a více Kč. Vypočtený průměr je 7034 Kč.
         </p>
-        <ul className="list-disc list-inside">
-            <li>Průměrný měsíční příjem z prodeje masa: 1917,34 Kč</li>
-            <li>Průměrný měsíční příjem z prodeje vajec pro spotřebu: 1155,36 Kč</li>
-            <li>Průměrná prodejní cena 1 kg masa: 216 Kč</li>
-            <li>Průměrná prodejní cena 1 ks vejce: 7,12 Kč</li>
-            <li>Průměrný roční příjem z prodeje živých zvířat: 4556 Kč</li>
-            <li>Průměrný roční příjem z prodeje násadových vajec: 3110 Kč, ale více než 80 % chovatelů uvedlo nulový příjem.</li>
+        <ul className="flex flex-col gap-0.5">
+            <li><strong>Průměrný měsíční příjem z prodeje masa:</strong> 1917,34 Kč</li>
+            <li><strong>Průměrný měsíční příjem z prodeje vajec pro spotřebu:</strong> 1155,36 Kč</li>
+            <li><strong>Průměrná prodejní cena 1 kg masa:</strong> 216 Kč</li>
+            <li><strong>Průměrná prodejní cena 1 ks vejce:</strong> 7,12 Kč</li>
+            <li><strong>Průměrný roční příjem z prodeje živých zvířat:</strong> 4556 Kč</li>
+            <li><strong>Průměrný roční příjem z prodeje násadových vajec:</strong> 3110 Kč, ale více než 80 % chovatelů uvedlo nulový příjem.</li>
         </ul>
         <h2 className="text-xl font-bold mt-6 mb-3">Králící:</h2>
         <p className="flex flex-col mb-3">
@@ -46,10 +46,10 @@ export default function page() {
             <span className="font-semibold">Roční náklady na pořízení zvířat:</span>
             Nejčastěji uváděnou odpovědí bylo opět 3001 a více Kč. Průměrná hodnota ročních nákladů na pořízení zvířat je přibližně 1581 Kč.
         </p>
-        <ul className="list-disc list-inside">
-            <li>Průměrný měsíční příjem z prodeje masa: 1002 Kč</li>
-            <li>Průměrná prodejní cena 1 kg masa: 159,24 Kč</li>
-            <li>Průměrný roční příjem z prodeje živých zvířat: 3400,57 Kč</li>
+        <ul className="flex flex-col gap-0.5">
+            <li><strong>Průměrný měsíční příjem z prodeje masa:</strong> 1002 Kč</li>
+            <li><strong>Průměrná prodejní cena 1 kg masa:</strong> 159,24 Kč</li>
+            <li><strong>Průměrný roční příjem z prodeje živých zvířat:</strong> 3400,57 Kč</li>
         </ul>
       </div>
     </div>

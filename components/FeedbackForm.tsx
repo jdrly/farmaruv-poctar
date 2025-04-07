@@ -184,7 +184,7 @@ export function FeedbackForm({ open, onOpenChange }: FeedbackFormProps) {
               required
             />
             <Label htmlFor="consent" className="text-sm gap-1">
-              Souhlasím se zpracováním <Link href="/osobni-udaje" className="text-primary underline">osobních údajů</Link>
+              Souhlasím se zpracováním <Link href="/gdpr" className="text-primary underline">osobních údajů</Link>
             </Label>
           </div>
           

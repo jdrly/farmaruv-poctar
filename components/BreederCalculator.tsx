@@ -8,6 +8,7 @@ import { useEffect, useState, useRef, useMemo } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 // Define types for our expense and income items
 interface CalculatorItem {
@@ -219,12 +220,15 @@ export function BreederCalculator() {
 
   // Handle expense value changes
   const handleExpenseChange = (id: string, value: number | null) => {
+    // Ensure value is not negative
+    const sanitizedValue = value !== null ? Math.max(0, value) : null;
+    
     const updatedExpenses = [...expenses];
     
     // Find the expense to update
     const index = updatedExpenses.findIndex(expense => expense.id === id);
     if (index !== -1) {
-      updatedExpenses[index] = { ...updatedExpenses[index], value };
+      updatedExpenses[index] = { ...updatedExpenses[index], value: sanitizedValue };
       
       // Update local state immediately
       setExpenses(updatedExpenses);
@@ -304,12 +308,15 @@ export function BreederCalculator() {
 
   // Handle income value changes
   const handleIncomeChange = (id: string, value: number | null) => {
+    // Ensure value is not negative
+    const sanitizedValue = value !== null ? Math.max(0, value) : null;
+    
     const updatedIncomes = [...incomes];
     
     // Find the income to update
     const index = updatedIncomes.findIndex(income => income.id === id);
     if (index !== -1) {
-      updatedIncomes[index] = { ...updatedIncomes[index], value };
+      updatedIncomes[index] = { ...updatedIncomes[index], value: sanitizedValue };
       
       // Update local state immediately
       setIncomes(updatedIncomes);
@@ -462,12 +469,15 @@ export function BreederCalculator() {
 
   // Handle animal count change
   const handleAnimalCountChange = (value: number | null) => {
+    // Ensure value is not negative
+    const sanitizedValue = value !== null ? Math.max(0, value) : null;
+    
     // Update local state immediately
-    setLocalAnimalCount(value);
+    setLocalAnimalCount(sanitizedValue);
     
     // Debounce the database save
     debounceSave('animal-count', () => {
-      saveAnimalCount({ count: value ?? undefined });
+      saveAnimalCount({ count: sanitizedValue ?? undefined });
     });
   };
 
@@ -576,15 +586,24 @@ export function BreederCalculator() {
               )}
             </TableBody>
           </Table>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={addCustomExpense} 
-            className="mt-2 w-full"
-            disabled={isLoading}
-          >
-            + Přidat vlastní položku
-          </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={addCustomExpense} 
+                  className="mt-2 w-full"
+                  disabled={isLoading}
+                >
+                  + Přidat vlastní položku
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Počítá se jako hodnota za měsíc</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
 
         {/* Income Table - Now in the third column */}
@@ -660,15 +679,24 @@ export function BreederCalculator() {
               )}
             </TableBody>
           </Table>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            onClick={addCustomIncome} 
-            className="mt-2 w-full"
-            disabled={isLoading}
-          >
-            + Přidat vlastní položku
-          </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={addCustomIncome} 
+                  className="mt-2 w-full"
+                  disabled={isLoading}
+                >
+                  + Přidat vlastní položku
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Počítá se jako hodnota za měsíc</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
 
@@ -685,7 +713,6 @@ export function BreederCalculator() {
             ) : (
               <p className="font-medium">{formatCurrency(calculateMonthlyExpenses())}</p>
             )}
-            <p className="text-sm text-muted-foreground">Součet měsíčních položek, zde označeno modře</p>
           </div>
           <div className="bg-amber-100/50 p-4 rounded-md">
             <h3 className="font-semibold mb-2">Celkové roční náklady</h3>
@@ -694,7 +721,6 @@ export function BreederCalculator() {
             ) : (
               <p className="font-medium">{formatCurrency(calculateMonthlyExpenses() * 12)}</p>
             )}
-            <p className="text-sm text-muted-foreground">Celkové měsíční náklady * 12</p>
           </div>
           
           <div className="bg-green-100/50 p-4 rounded-md">
@@ -704,7 +730,6 @@ export function BreederCalculator() {
             ) : (
               <p className="font-medium">{formatCurrency(calculateMonthlyIncome())}</p>
             )}
-            <p className="text-sm text-muted-foreground">Součet měsíčních položek, zde označeno oranžově</p>
           </div>
           <div className="bg-green-100/50 p-4 rounded-md">
             <h3 className="font-semibold mb-2">Celkové roční příjmy</h3>
@@ -713,7 +738,6 @@ export function BreederCalculator() {
             ) : (
               <p className="font-medium">{formatCurrency(calculateMonthlyIncome() * 12)}</p>
             )}
-            <p className="text-sm text-muted-foreground">Celkové měsíční příjmy * 12</p>
           </div>
         </div>
         
@@ -728,7 +752,6 @@ export function BreederCalculator() {
                 {localAnimalCount ? formatCurrency(calculateMonthlyPerAnimalCost()) : "—"}
               </p>
             )}
-            <p className="text-sm text-muted-foreground">Celkové měsíční náklady / počet chovaných zvířat</p>
           </div>
           <div className="bg-purple-100/50 p-4 rounded-md">
             <h3 className="font-semibold mb-2">Roční náklad na 1 zvíře</h3>
@@ -739,7 +762,6 @@ export function BreederCalculator() {
                 {localAnimalCount ? formatCurrency(calculateYearlyPerAnimalCost()) : "—"}
               </p>
             )}
-            <p className="text-sm text-muted-foreground">Celkové roční náklady / počet chovaných zvířat</p>
           </div>
         </div>
         
@@ -757,7 +779,6 @@ export function BreederCalculator() {
                   {formatCurrency(monthlyProfit)}
                 </p>
               )}
-              <p className="text-sm text-muted-foreground">Celkové měsíční příjmy - Celkové měsíční náklady</p>
             </div>
             
             <div>
@@ -769,7 +790,6 @@ export function BreederCalculator() {
                   {formatCurrency(yearlyProfit)}
                 </p>
               )}
-              <p className="text-sm text-muted-foreground">Celkové roční příjmy - Celkové roční náklady</p>
             </div>
           </div>
         </div>
