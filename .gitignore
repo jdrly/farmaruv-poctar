@@ -37,9 +37,10 @@ yarn-error.log*
 .vercel
 
 # cursor
-/.cursor
+.cursor/
 .cursor
-/.cursor
+**/.cursor/
+**/.cursor
 
 # typescript
 *.tsbuildinfo
