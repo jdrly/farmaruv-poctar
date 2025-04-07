@@ -4,7 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
@@ -24,8 +24,12 @@ interface CalculatorItem {
 export function BreederCalculator() {
   // Get data from Convex
   const animalCount = useQuery(api.calculator.getAnimalCount);
-  const expenseItems = useQuery(api.calculator.getExpenses) || [];
-  const incomeItems = useQuery(api.calculator.getIncomes) || [];
+  const expenseItemsQuery = useQuery(api.calculator.getExpenses);
+  const incomeItemsQuery = useQuery(api.calculator.getIncomes);
+  
+  // Use useMemo to prevent recreating empty arrays on each render
+  const expenseItems = useMemo(() => expenseItemsQuery || [], [expenseItemsQuery]);
+  const incomeItems = useMemo(() => incomeItemsQuery || [], [incomeItemsQuery]);
   
   // Check if data is loading
   const isLoading = animalCount === undefined || expenseItems.length === 0 || incomeItems.length === 0;
