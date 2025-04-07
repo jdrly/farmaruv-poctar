@@ -1,6 +1,6 @@
 'use client';
 
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -215,7 +215,7 @@ export function BreederCalculator() {
 
   // Handle expense value changes
   const handleExpenseChange = (id: string, value: number | null) => {
-    let updatedExpenses = [...expenses];
+    const updatedExpenses = [...expenses];
     
     // Find the expense to update
     const index = updatedExpenses.findIndex(expense => expense.id === id);
@@ -300,7 +300,7 @@ export function BreederCalculator() {
 
   // Handle income value changes
   const handleIncomeChange = (id: string, value: number | null) => {
-    let updatedIncomes = [...incomes];
+    const updatedIncomes = [...incomes];
     
     // Find the income to update
     const index = updatedIncomes.findIndex(income => income.id === id);

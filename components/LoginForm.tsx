@@ -6,6 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
+import Image from "next/image";
 
 interface LoginFormProps extends React.ComponentPropsWithoutRef<"form"> {
   error?: string | null;
@@ -84,8 +85,10 @@ export function LoginForm({
             </div>
           </form>
           <div className="bg-muted relative hidden md:block">
-            <img
+            <Image
               src="/farmaruvpoctar_loginbg.webp"
+              width={1024}
+              height={1024}
               alt="Image"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
             />

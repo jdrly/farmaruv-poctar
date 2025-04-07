@@ -37,14 +37,13 @@ export function FeedbackForm({ open, onOpenChange }: FeedbackFormProps) {
   // Prefill email when user data is loaded
   useEffect(() => {
     if (user?.email && typeof user.email === 'string') {
-      // @ts-ignore - TypeScript has issues with the email type but it works correctly
+      // @ts-expect-error - TypeScript has issues with the email type but it works correctly
       setFormData(currentFormData => ({
         ...currentFormData,
         email: user.email
       }));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.email]);
+  }, [user?.email]); // Remove the eslint-disable comment
   
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -111,7 +110,7 @@ export function FeedbackForm({ open, onOpenChange }: FeedbackFormProps) {
       } else {
         setSubmitError(result.error || "Nepodařilo se odeslat zpětnou vazbu.");
       }
-    } catch (error) {
+    } catch (_) { // Change 'error' to '_' to avoid the unused variable error
       setSubmitError("Došlo k neočekávané chybě. Zkuste to prosím později.");
     } finally {
       setIsSubmitting(false);
