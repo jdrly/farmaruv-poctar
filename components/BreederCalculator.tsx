@@ -389,15 +389,28 @@ export function BreederCalculator() {
 
   // Calculate totals
   const calculateMonthlyExpenses = () => {
-    return expenses
+    // Remove console logs for production
+    // console.log("Expenses being calculated:", expenses);
+    
+    const monthlyTotal = expenses
       .filter(expense => expense.value !== null)
       .reduce((total, expense) => {
+        // Only include expenses that are marked as monthly
+        // or calculate monthly value from yearly expenses
         if (expense.isMonthly) {
+          // Skip monthly items that are auto-calculated from yearly values
+          // to avoid double counting
+          if (expense.id === 'equipment-monthly' || expense.id === 'animals-monthly') {
+            return total;
+          }
           return total + (expense.value || 0);
         } else {
-          return total + ((expense.value || 0) / 12); // Convert yearly to monthly
+          // Convert yearly expenses to monthly
+          return total + ((expense.value || 0) / 12);
         }
       }, 0);
+    
+    return monthlyTotal;
   };
 
   const calculateMonthlyIncome = () => {
@@ -405,9 +418,15 @@ export function BreederCalculator() {
       .filter(income => income.value !== null)
       .reduce((total, income) => {
         if (income.isMonthly) {
+          // Skip monthly items that are auto-calculated from yearly values
+          // to avoid double counting
+          if (income.id === 'eggs-hatching-monthly' || income.id === 'animals-monthly') {
+            return total;
+          }
           return total + (income.value || 0);
         } else {
-          return total + ((income.value || 0) / 12); // Convert yearly to monthly
+          // Convert yearly incomes to monthly
+          return total + ((income.value || 0) / 12);
         }
       }, 0);
   };
