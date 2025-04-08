@@ -171,6 +171,7 @@ export function BreederCalculator() {
       value: null, 
       note: '', 
       isCustom: true,
+      isMonthly: true,
       order: newOrder
     };
     
@@ -183,7 +184,7 @@ export function BreederCalculator() {
       name: 'Vlastní položka',
       value: undefined,
       note: '',
-      isMonthly: false,
+      isMonthly: true,
       isCustom: true,
       order: newOrder
     });
@@ -200,6 +201,7 @@ export function BreederCalculator() {
       value: null, 
       note: '', 
       isCustom: true,
+      isMonthly: true,
       order: newOrder
     };
     
@@ -212,7 +214,7 @@ export function BreederCalculator() {
       name: 'Vlastní položka',
       value: undefined,
       note: '',
-      isMonthly: false,
+      isMonthly: true,
       isCustom: true,
       order: newOrder
     });
@@ -407,7 +409,7 @@ export function BreederCalculator() {
       .reduce((total, expense) => {
         // Only include expenses that are marked as monthly
         // or calculate monthly value from yearly expenses
-        if (expense.isMonthly) {
+        if (expense.isMonthly || expense.isCustom) {
           // Skip monthly items that are auto-calculated from yearly values
           // to avoid double counting
           if (expense.id === 'equipment-monthly' || expense.id === 'animals-monthly') {
@@ -427,7 +429,7 @@ export function BreederCalculator() {
     return incomes
       .filter(income => income.value !== null)
       .reduce((total, income) => {
-        if (income.isMonthly) {
+        if (income.isMonthly || income.isCustom) {
           // Skip monthly items that are auto-calculated from yearly values
           // to avoid double counting
           if (income.id === 'eggs-hatching-monthly' || income.id === 'animals-monthly') {
