@@ -53,7 +53,7 @@ export function BreederCalculator() {
   const saveTimersRef = useRef<Record<string, NodeJS.Timeout>>({});
   
   // Function to debounce database saves
-  const debounceSave = (key: string, saveFunction: () => void, delay: number = 500) => {
+  const debounceSave = (key: string, saveFunction: () => void, delay: number = 800) => {
     if (saveTimersRef.current[key]) {
       clearTimeout(saveTimersRef.current[key]);
     }
@@ -218,11 +218,21 @@ export function BreederCalculator() {
     });
   };
 
-  // Handle expense value changes
+  // Add this state to track values that are being edited
+  const [editingValues, setEditingValues] = useState<Record<string, string>>({});
+
+  // Handle expense value changes with optimized UI updates
   const handleExpenseChange = (id: string, value: number | null) => {
-    // Ensure value is not negative
-    const sanitizedValue = value !== null ? Math.max(0, value) : null;
+    // Store the raw input value for display purposes
+    setEditingValues(prev => ({
+      ...prev,
+      [id]: value === null ? '' : value.toString()
+    }));
     
+    // Ensure value is not negative and convert empty input to 0
+    const sanitizedValue = value !== null ? Math.max(0, value) : 0;
+    
+    // Create a copy of expenses to work with
     const updatedExpenses = [...expenses];
     
     // Find the expense to update
@@ -230,7 +240,28 @@ export function BreederCalculator() {
     if (index !== -1) {
       updatedExpenses[index] = { ...updatedExpenses[index], value: sanitizedValue };
       
-      // Update local state immediately
+      // Handle monthly calculations in the same update
+      if (id === 'equipment') {
+        const monthlyIndex = updatedExpenses.findIndex(expense => expense.id === 'equipment-monthly');
+        if (monthlyIndex !== -1) {
+          const monthlyValue = sanitizedValue / 12;
+          updatedExpenses[monthlyIndex] = { 
+            ...updatedExpenses[monthlyIndex], 
+            value: monthlyValue
+          };
+        }
+      } else if (id === 'animals') {
+        const monthlyIndex = updatedExpenses.findIndex(expense => expense.id === 'animals-monthly');
+        if (monthlyIndex !== -1) {
+          const monthlyValue = sanitizedValue / 12;
+          updatedExpenses[monthlyIndex] = { 
+            ...updatedExpenses[monthlyIndex], 
+            value: monthlyValue
+          };
+        }
+      }
+      
+      // Update local state once with all changes
       setExpenses(updatedExpenses);
       
       // Debounce the database save
@@ -239,78 +270,57 @@ export function BreederCalculator() {
         saveExpenseItem({
           itemId: id,
           name: expense.name,
-          value: value ?? undefined,
+          value: sanitizedValue,
           note: expense.note,
           isMonthly: expense.isMonthly,
           isCustom: expense.isCustom,
           order: expense.order ?? 0
         });
         
-        // Auto-calculate monthly values from yearly values
-        if (value !== null) {
-          if (id === 'equipment') {
-            const monthlyIndex = updatedExpenses.findIndex(expense => expense.id === 'equipment-monthly');
-            if (monthlyIndex !== -1) {
-              const monthlyValue = value / 12;
-              updatedExpenses[monthlyIndex] = { 
-                ...updatedExpenses[monthlyIndex], 
-                value: monthlyValue
-              };
-              
-              // Save monthly value to database
-              const monthlyExpense = updatedExpenses[monthlyIndex];
-              saveExpenseItem({
-                itemId: 'equipment-monthly',
-                name: monthlyExpense.name,
-                value: monthlyValue,
-                note: monthlyExpense.note,
-                isMonthly: monthlyExpense.isMonthly,
-                isCustom: monthlyExpense.isCustom,
-                order: monthlyExpense.order ?? 0
-              });
-              
-              // Update local state with the calculated monthly value
-              setExpenses(prev => prev.map(e => 
-                e.id === 'equipment-monthly' ? { ...e, value: monthlyValue } : e
-              ));
-            }
-          } else if (id === 'animals') {
-            const monthlyIndex = updatedExpenses.findIndex(expense => expense.id === 'animals-monthly');
-            if (monthlyIndex !== -1) {
-              const monthlyValue = value / 12;
-              updatedExpenses[monthlyIndex] = { 
-                ...updatedExpenses[monthlyIndex], 
-                value: monthlyValue
-              };
-              
-              // Save monthly value to database
-              const monthlyExpense = updatedExpenses[monthlyIndex];
-              saveExpenseItem({
-                itemId: 'animals-monthly',
-                name: monthlyExpense.name,
-                value: monthlyValue,
-                note: monthlyExpense.note,
-                isMonthly: monthlyExpense.isMonthly,
-                isCustom: monthlyExpense.isCustom,
-                order: monthlyExpense.order ?? 0
-              });
-              
-              // Update local state with the calculated monthly value
-              setExpenses(prev => prev.map(e => 
-                e.id === 'animals-monthly' ? { ...e, value: monthlyValue } : e
-              ));
-            }
+        // Save monthly value to database if needed
+        if (id === 'equipment') {
+          const monthlyExpense = updatedExpenses.find(e => e.id === 'equipment-monthly');
+          if (monthlyExpense) {
+            saveExpenseItem({
+              itemId: 'equipment-monthly',
+              name: monthlyExpense.name,
+              value: monthlyExpense.value ?? 0,
+              note: monthlyExpense.note,
+              isMonthly: monthlyExpense.isMonthly,
+              isCustom: monthlyExpense.isCustom,
+              order: monthlyExpense.order ?? 0
+            });
+          }
+        } else if (id === 'animals') {
+          const monthlyExpense = updatedExpenses.find(e => e.id === 'animals-monthly');
+          if (monthlyExpense) {
+            saveExpenseItem({
+              itemId: 'animals-monthly',
+              name: monthlyExpense.name,
+              value: monthlyExpense.value ?? 0,
+              note: monthlyExpense.note,
+              isMonthly: monthlyExpense.isMonthly,
+              isCustom: monthlyExpense.isCustom,
+              order: monthlyExpense.order ?? 0
+            });
           }
         }
       });
     }
   };
 
-  // Handle income value changes
+  // Handle income value changes with optimized UI updates
   const handleIncomeChange = (id: string, value: number | null) => {
-    // Ensure value is not negative
-    const sanitizedValue = value !== null ? Math.max(0, value) : null;
+    // Store the raw input value for display purposes
+    setEditingValues(prev => ({
+      ...prev,
+      [id]: value === null ? '' : value.toString()
+    }));
     
+    // Ensure value is not negative and convert empty input to 0
+    const sanitizedValue = value !== null ? Math.max(0, value) : 0;
+    
+    // Create a copy of incomes to work with
     const updatedIncomes = [...incomes];
     
     // Find the income to update
@@ -318,7 +328,28 @@ export function BreederCalculator() {
     if (index !== -1) {
       updatedIncomes[index] = { ...updatedIncomes[index], value: sanitizedValue };
       
-      // Update local state immediately
+      // Handle monthly calculations in the same update
+      if (id === 'eggs-hatching') {
+        const monthlyIndex = updatedIncomes.findIndex(income => income.id === 'eggs-hatching-monthly');
+        if (monthlyIndex !== -1) {
+          const monthlyValue = sanitizedValue / 12;
+          updatedIncomes[monthlyIndex] = { 
+            ...updatedIncomes[monthlyIndex], 
+            value: monthlyValue
+          };
+        }
+      } else if (id === 'animals-yearly') {
+        const monthlyIndex = updatedIncomes.findIndex(income => income.id === 'animals-monthly');
+        if (monthlyIndex !== -1) {
+          const monthlyValue = sanitizedValue / 12;
+          updatedIncomes[monthlyIndex] = { 
+            ...updatedIncomes[monthlyIndex], 
+            value: monthlyValue
+          };
+        }
+      }
+      
+      // Update local state once with all changes
       setIncomes(updatedIncomes);
       
       // Debounce the database save
@@ -327,67 +358,39 @@ export function BreederCalculator() {
         saveIncomeItem({
           itemId: id,
           name: income.name,
-          value: value ?? undefined,
+          value: sanitizedValue,
           note: income.note,
           isMonthly: income.isMonthly,
           isCustom: income.isCustom,
           order: income.order ?? 0
         });
         
-        // Auto-calculate monthly values from yearly values
-        if (value !== null) {
-          if (id === 'eggs-hatching') {
-            const monthlyIndex = updatedIncomes.findIndex(income => income.id === 'eggs-hatching-monthly');
-            if (monthlyIndex !== -1) {
-              const monthlyValue = value / 12;
-              updatedIncomes[monthlyIndex] = { 
-                ...updatedIncomes[monthlyIndex], 
-                value: monthlyValue
-              };
-              
-              // Save monthly value to database
-              const monthlyIncome = updatedIncomes[monthlyIndex];
-              saveIncomeItem({
-                itemId: 'eggs-hatching-monthly',
-                name: monthlyIncome.name,
-                value: monthlyValue,
-                note: monthlyIncome.note,
-                isMonthly: monthlyIncome.isMonthly,
-                isCustom: monthlyIncome.isCustom,
-                order: monthlyIncome.order ?? 0
-              });
-              
-              // Update local state with the calculated monthly value
-              setIncomes(prev => prev.map(i => 
-                i.id === 'eggs-hatching-monthly' ? { ...i, value: monthlyValue } : i
-              ));
-            }
-          } else if (id === 'animals-yearly') {
-            const monthlyIndex = updatedIncomes.findIndex(income => income.id === 'animals-monthly');
-            if (monthlyIndex !== -1) {
-              const monthlyValue = value / 12;
-              updatedIncomes[monthlyIndex] = { 
-                ...updatedIncomes[monthlyIndex], 
-                value: monthlyValue
-              };
-              
-              // Save monthly value to database
-              const monthlyIncome = updatedIncomes[monthlyIndex];
-              saveIncomeItem({
-                itemId: 'animals-monthly',
-                name: monthlyIncome.name,
-                value: monthlyValue,
-                note: monthlyIncome.note,
-                isMonthly: monthlyIncome.isMonthly,
-                isCustom: monthlyIncome.isCustom,
-                order: monthlyIncome.order ?? 0
-              });
-              
-              // Update local state with the calculated monthly value
-              setIncomes(prev => prev.map(i => 
-                i.id === 'animals-monthly' ? { ...i, value: monthlyValue } : i
-              ));
-            }
+        // Save monthly value to database if needed
+        if (id === 'eggs-hatching') {
+          const monthlyIncome = updatedIncomes.find(i => i.id === 'eggs-hatching-monthly');
+          if (monthlyIncome) {
+            saveIncomeItem({
+              itemId: 'eggs-hatching-monthly',
+              name: monthlyIncome.name,
+              value: monthlyIncome.value ?? 0,
+              note: monthlyIncome.note,
+              isMonthly: monthlyIncome.isMonthly,
+              isCustom: monthlyIncome.isCustom,
+              order: monthlyIncome.order ?? 0
+            });
+          }
+        } else if (id === 'animals-yearly') {
+          const monthlyIncome = updatedIncomes.find(i => i.id === 'animals-monthly');
+          if (monthlyIncome) {
+            saveIncomeItem({
+              itemId: 'animals-monthly',
+              name: monthlyIncome.name,
+              value: monthlyIncome.value ?? 0,
+              note: monthlyIncome.note,
+              isMonthly: monthlyIncome.isMonthly,
+              isCustom: monthlyIncome.isCustom,
+              order: monthlyIncome.order ?? 0
+            });
           }
         }
       });
@@ -469,16 +472,22 @@ export function BreederCalculator() {
 
   // Handle animal count change
   const handleAnimalCountChange = (value: number | null) => {
-    // Ensure value is not negative
-    const sanitizedValue = value !== null ? Math.max(0, value) : null;
+    // Ensure value is not negative and convert empty input to 0
+    const sanitizedValue = value !== null ? Math.max(0, value) : 0;
     
     // Update local state immediately
     setLocalAnimalCount(sanitizedValue);
     
+    // Trigger immediate recalculation for UI
+    setTimeout(() => {
+      calculateMonthlyPerAnimalCost();
+      calculateYearlyPerAnimalCost();
+    }, 0);
+    
     // Debounce the database save
     debounceSave('animal-count', () => {
-      saveAnimalCount({ count: sanitizedValue ?? undefined });
-    });
+      saveAnimalCount({ count: sanitizedValue }); // Always save a number, never undefined
+    }, 800);
   };
 
   // Calculate per-animal costs
@@ -504,11 +513,12 @@ export function BreederCalculator() {
           <Input 
             type="number" 
             placeholder="Zadejte počet zvířat"
-            value={localAnimalCount === null ? '' : localAnimalCount}
+            value={localAnimalCount === null || localAnimalCount === undefined ? '' : localAnimalCount === 0 ? '0' : localAnimalCount.toString()}
             onChange={(e) => {
               const value = e.target.value === '' ? null : parseFloat(e.target.value);
               handleAnimalCountChange(value);
             }}
+            min="0"
           />
         )}
       </div>
@@ -560,7 +570,7 @@ export function BreederCalculator() {
                       {expense.id === 'equipment-monthly' || expense.id === 'animals-monthly' ? (
                         <Input
                           type="text"
-                          value={expense.value === null ? '' : expense.value.toLocaleString('cs-CZ', {
+                          value={expense.value === null || expense.value === 0 ? '0,00' : expense.value.toLocaleString('cs-CZ', {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2
                           })}
@@ -571,7 +581,9 @@ export function BreederCalculator() {
                       ) : (
                         <Input
                           type="number"
-                          value={expense.value === null ? '' : expense.value}
+                          value={editingValues[expense.id] !== undefined ? editingValues[expense.id] : 
+                                 expense.value === null || expense.value === undefined ? '' : 
+                                 expense.value === 0 ? '0' : expense.value.toString()}
                           onChange={(e) => handleExpenseChange(
                             expense.id, 
                             e.target.value === '' ? null : parseFloat(e.target.value)
@@ -653,7 +665,7 @@ export function BreederCalculator() {
                       {income.id === 'eggs-hatching-monthly' || income.id === 'animals-monthly' ? (
                         <Input
                           type="text"
-                          value={income.value === null ? '' : income.value.toLocaleString('cs-CZ', {
+                          value={income.value === null || income.value === 0 ? '0,00' : income.value.toLocaleString('cs-CZ', {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2
                           })}
@@ -664,7 +676,9 @@ export function BreederCalculator() {
                       ) : (
                         <Input
                           type="number"
-                          value={income.value === null ? '' : income.value}
+                          value={editingValues[income.id] !== undefined ? editingValues[income.id] : 
+                                 income.value === null || income.value === undefined ? '' : 
+                                 income.value === 0 ? '0' : income.value.toString()}
                           onChange={(e) => handleIncomeChange(
                             income.id, 
                             e.target.value === '' ? null : parseFloat(e.target.value)
