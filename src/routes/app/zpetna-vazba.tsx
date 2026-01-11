@@ -140,7 +140,7 @@ function FeedbackPage() {
                       {field.state.meta.isTouched &&
                         field.state.meta.errors[0] && (
                           <p className="text-sm text-destructive">
-                            {field.state.meta.errors[0]}
+                            {field.state.meta.errors[0]?.message}
                           </p>
                         )}
                     </div>
@@ -165,7 +165,7 @@ function FeedbackPage() {
                       {field.state.meta.isTouched &&
                         field.state.meta.errors[0] && (
                           <p className="text-sm text-destructive">
-                            {field.state.meta.errors[0]}
+                            {field.state.meta.errors[0]?.message}
                           </p>
                         )}
                     </div>
@@ -192,7 +192,7 @@ function FeedbackPage() {
                     {field.state.meta.isTouched &&
                       field.state.meta.errors[0] && (
                         <p className="text-sm text-destructive">
-                          {field.state.meta.errors[0]}
+                          {field.state.meta.errors[0]?.message}
                         </p>
                       )}
                   </div>
@@ -221,7 +221,7 @@ function FeedbackPage() {
                     {field.state.meta.isTouched &&
                       field.state.meta.errors[0] && (
                         <p className="text-sm text-destructive">
-                          {field.state.meta.errors[0]}
+                          {field.state.meta.errors[0]?.message}
                         </p>
                       )}
                   </div>
@@ -271,7 +271,7 @@ function FeedbackPage() {
                     {field.state.meta.isTouched &&
                       field.state.meta.errors[0] && (
                         <p className="text-sm text-destructive">
-                          {field.state.meta.errors[0]}
+                          {field.state.meta.errors[0]?.message}
                         </p>
                       )}
                   </div>
