@@ -1,6 +1,12 @@
 import { v } from 'convex/values'
 import { mutation, query } from './_generated/server'
 import { auth } from './auth'
+import {
+  requireAuth,
+  validatePositiveNumber,
+  validateNonEmptyString,
+  validateMaxLength,
+} from './errors'
 
 // ============ VALIDATORS (exported for frontend type inference) ============
 
@@ -44,23 +50,88 @@ export const calculatorDataValidator = v.object({
 // Default expense items for new users
 const DEFAULT_EXPENSES = [
   { id: 'feed', name: 'Měsíční náklady na krmení', isMonthly: true, order: 0 },
-  { id: 'equipment', name: 'Roční náklady na vybavení', isMonthly: false, order: 1 },
-  { id: 'equipment-monthly', name: 'Měsíční náklady na vybavení', isMonthly: true, order: 2 },
-  { id: 'vet', name: 'Měsíční náklady na veterinární péči', isMonthly: true, order: 3 },
-  { id: 'animals', name: 'Roční náklady na pořízení zvířat', isMonthly: false, order: 4 },
-  { id: 'animals-monthly', name: 'Měsíční náklady na pořízení zvířat', isMonthly: true, order: 5 },
+  {
+    id: 'equipment',
+    name: 'Roční náklady na vybavení',
+    isMonthly: false,
+    order: 1,
+  },
+  {
+    id: 'equipment-monthly',
+    name: 'Měsíční náklady na vybavení',
+    isMonthly: true,
+    order: 2,
+  },
+  {
+    id: 'vet',
+    name: 'Měsíční náklady na veterinární péči',
+    isMonthly: true,
+    order: 3,
+  },
+  {
+    id: 'animals',
+    name: 'Roční náklady na pořízení zvířat',
+    isMonthly: false,
+    order: 4,
+  },
+  {
+    id: 'animals-monthly',
+    name: 'Měsíční náklady na pořízení zvířat',
+    isMonthly: true,
+    order: 5,
+  },
 ] as const
 
 // Default income items for new users
 const DEFAULT_INCOMES = [
-  { id: 'meat', name: 'Měsíční příjmy z prodeje masa', isMonthly: true, order: 0 },
-  { id: 'eggs-consumption', name: 'Měsíční příjmy z prodeje vajec pro spotřebu', isMonthly: true, order: 1 },
-  { id: 'eggs-hatching', name: 'Roční příjem z prodeje násadových vajec', isMonthly: false, order: 2 },
-  { id: 'eggs-hatching-monthly', name: 'Měsíční příjem z prodeje násadových vajec', isMonthly: true, order: 3 },
-  { id: 'animals-yearly', name: 'Roční příjem z prodeje živých zvířat', isMonthly: false, order: 4 },
-  { id: 'animals-monthly', name: 'Měsíční příjem z prodeje živých zvířat', isMonthly: true, order: 5 },
-  { id: 'other-income', name: 'Měsíční příjem z vedlejší živočišné produkce', isMonthly: true, order: 6 },
-  { id: 'subsidies', name: 'Měsíční příjem z pobíraných dotací', isMonthly: true, order: 7 },
+  {
+    id: 'meat',
+    name: 'Měsíční příjmy z prodeje masa',
+    isMonthly: true,
+    order: 0,
+  },
+  {
+    id: 'eggs-consumption',
+    name: 'Měsíční příjmy z prodeje vajec pro spotřebu',
+    isMonthly: true,
+    order: 1,
+  },
+  {
+    id: 'eggs-hatching',
+    name: 'Roční příjem z prodeje násadových vajec',
+    isMonthly: false,
+    order: 2,
+  },
+  {
+    id: 'eggs-hatching-monthly',
+    name: 'Měsíční příjem z prodeje násadových vajec',
+    isMonthly: true,
+    order: 3,
+  },
+  {
+    id: 'animals-yearly',
+    name: 'Roční příjem z prodeje živých zvířat',
+    isMonthly: false,
+    order: 4,
+  },
+  {
+    id: 'animals-monthly',
+    name: 'Měsíční příjem z prodeje živých zvířat',
+    isMonthly: true,
+    order: 5,
+  },
+  {
+    id: 'other-income',
+    name: 'Měsíční příjem z vedlejší živočišné produkce',
+    isMonthly: true,
+    order: 6,
+  },
+  {
+    id: 'subsidies',
+    name: 'Měsíční příjem z pobíraných dotací',
+    isMonthly: true,
+    order: 7,
+  },
 ] as const
 
 // ============ QUERIES ============
@@ -162,7 +233,10 @@ export const saveAnimalCount = mutation({
   returns: v.id('calculatorData'),
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx)
-    if (!userId) throw new Error('Not authenticated')
+    requireAuth(userId)
+
+    // Validate animal count is not negative
+    validatePositiveNumber(args.count, 'Počet zvířat')
 
     const existingData = await ctx.db
       .query('calculatorData')
@@ -194,11 +268,20 @@ export const saveExpenseItem = mutation({
   returns: v.id('expenseItems'),
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx)
-    if (!userId) throw new Error('Not authenticated')
+    requireAuth(userId)
+
+    // Validate inputs
+    validateNonEmptyString(args.itemId, 'ID položky')
+    validateNonEmptyString(args.name, 'Název')
+    validateMaxLength(args.name, 200, 'Název')
+    validateMaxLength(args.note, 1000, 'Poznámka')
+    validatePositiveNumber(args.value, 'Hodnota')
 
     const existingItem = await ctx.db
       .query('expenseItems')
-      .withIndex('by_userId_and_itemId', (q) => q.eq('userId', userId).eq('itemId', args.itemId))
+      .withIndex('by_userId_and_itemId', (q) =>
+        q.eq('userId', userId).eq('itemId', args.itemId),
+      )
       .first()
 
     if (existingItem) {
@@ -239,11 +322,20 @@ export const saveIncomeItem = mutation({
   returns: v.id('incomeItems'),
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx)
-    if (!userId) throw new Error('Not authenticated')
+    requireAuth(userId)
+
+    // Validate inputs
+    validateNonEmptyString(args.itemId, 'ID položky')
+    validateNonEmptyString(args.name, 'Název')
+    validateMaxLength(args.name, 200, 'Název')
+    validateMaxLength(args.note, 1000, 'Poznámka')
+    validatePositiveNumber(args.value, 'Hodnota')
 
     const existingItem = await ctx.db
       .query('incomeItems')
-      .withIndex('by_userId_and_itemId', (q) => q.eq('userId', userId).eq('itemId', args.itemId))
+      .withIndex('by_userId_and_itemId', (q) =>
+        q.eq('userId', userId).eq('itemId', args.itemId),
+      )
       .first()
 
     if (existingItem) {
@@ -278,11 +370,13 @@ export const deleteExpenseItem = mutation({
   returns: v.boolean(),
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx)
-    if (!userId) throw new Error('Not authenticated')
+    requireAuth(userId)
 
     const item = await ctx.db
       .query('expenseItems')
-      .withIndex('by_userId_and_itemId', (q) => q.eq('userId', userId).eq('itemId', args.itemId))
+      .withIndex('by_userId_and_itemId', (q) =>
+        q.eq('userId', userId).eq('itemId', args.itemId),
+      )
       .first()
 
     if (item) {
@@ -300,11 +394,13 @@ export const deleteIncomeItem = mutation({
   returns: v.boolean(),
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx)
-    if (!userId) throw new Error('Not authenticated')
+    requireAuth(userId)
 
     const item = await ctx.db
       .query('incomeItems')
-      .withIndex('by_userId_and_itemId', (q) => q.eq('userId', userId).eq('itemId', args.itemId))
+      .withIndex('by_userId_and_itemId', (q) =>
+        q.eq('userId', userId).eq('itemId', args.itemId),
+      )
       .first()
 
     if (item) {
@@ -324,11 +420,15 @@ export const updateExpenseValue = mutation({
   returns: v.boolean(),
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx)
-    if (!userId) throw new Error('Not authenticated')
+    requireAuth(userId)
+
+    validatePositiveNumber(args.value, 'Hodnota')
 
     const item = await ctx.db
       .query('expenseItems')
-      .withIndex('by_userId_and_itemId', (q) => q.eq('userId', userId).eq('itemId', args.itemId))
+      .withIndex('by_userId_and_itemId', (q) =>
+        q.eq('userId', userId).eq('itemId', args.itemId),
+      )
       .first()
 
     if (item) {
@@ -348,11 +448,15 @@ export const updateIncomeValue = mutation({
   returns: v.boolean(),
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx)
-    if (!userId) throw new Error('Not authenticated')
+    requireAuth(userId)
+
+    validatePositiveNumber(args.value, 'Hodnota')
 
     const item = await ctx.db
       .query('incomeItems')
-      .withIndex('by_userId_and_itemId', (q) => q.eq('userId', userId).eq('itemId', args.itemId))
+      .withIndex('by_userId_and_itemId', (q) =>
+        q.eq('userId', userId).eq('itemId', args.itemId),
+      )
       .first()
 
     if (item) {
@@ -372,11 +476,15 @@ export const updateExpenseNote = mutation({
   returns: v.boolean(),
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx)
-    if (!userId) throw new Error('Not authenticated')
+    requireAuth(userId)
+
+    validateMaxLength(args.note, 1000, 'Poznámka')
 
     const item = await ctx.db
       .query('expenseItems')
-      .withIndex('by_userId_and_itemId', (q) => q.eq('userId', userId).eq('itemId', args.itemId))
+      .withIndex('by_userId_and_itemId', (q) =>
+        q.eq('userId', userId).eq('itemId', args.itemId),
+      )
       .first()
 
     if (item) {
@@ -396,11 +504,15 @@ export const updateIncomeNote = mutation({
   returns: v.boolean(),
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx)
-    if (!userId) throw new Error('Not authenticated')
+    requireAuth(userId)
+
+    validateMaxLength(args.note, 1000, 'Poznámka')
 
     const item = await ctx.db
       .query('incomeItems')
-      .withIndex('by_userId_and_itemId', (q) => q.eq('userId', userId).eq('itemId', args.itemId))
+      .withIndex('by_userId_and_itemId', (q) =>
+        q.eq('userId', userId).eq('itemId', args.itemId),
+      )
       .first()
 
     if (item) {
@@ -419,7 +531,10 @@ export const addCustomExpense = mutation({
   returns: v.id('expenseItems'),
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx)
-    if (!userId) throw new Error('Not authenticated')
+    requireAuth(userId)
+
+    validateNonEmptyString(args.name, 'Název')
+    validateMaxLength(args.name, 200, 'Název')
 
     // Get existing expenses to determine order and generate unique ID
     const existingExpenses = await ctx.db
@@ -428,7 +543,10 @@ export const addCustomExpense = mutation({
       .collect()
 
     const customCount = existingExpenses.filter((e) => e.isCustom).length
-    const maxOrder = existingExpenses.reduce((max, e) => Math.max(max, e.order), -1)
+    const maxOrder = existingExpenses.reduce(
+      (max, e) => Math.max(max, e.order),
+      -1,
+    )
 
     return await ctx.db.insert('expenseItems', {
       userId,
@@ -451,7 +569,10 @@ export const addCustomIncome = mutation({
   returns: v.id('incomeItems'),
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx)
-    if (!userId) throw new Error('Not authenticated')
+    requireAuth(userId)
+
+    validateNonEmptyString(args.name, 'Název')
+    validateMaxLength(args.name, 200, 'Název')
 
     // Get existing incomes to determine order and generate unique ID
     const existingIncomes = await ctx.db
@@ -460,7 +581,10 @@ export const addCustomIncome = mutation({
       .collect()
 
     const customCount = existingIncomes.filter((i) => i.isCustom).length
-    const maxOrder = existingIncomes.reduce((max, i) => Math.max(max, i.order), -1)
+    const maxOrder = existingIncomes.reduce(
+      (max, i) => Math.max(max, i.order),
+      -1,
+    )
 
     return await ctx.db.insert('incomeItems', {
       userId,
@@ -484,11 +608,16 @@ export const renameExpenseItem = mutation({
   returns: v.boolean(),
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx)
-    if (!userId) throw new Error('Not authenticated')
+    requireAuth(userId)
+
+    validateNonEmptyString(args.name, 'Název')
+    validateMaxLength(args.name, 200, 'Název')
 
     const item = await ctx.db
       .query('expenseItems')
-      .withIndex('by_userId_and_itemId', (q) => q.eq('userId', userId).eq('itemId', args.itemId))
+      .withIndex('by_userId_and_itemId', (q) =>
+        q.eq('userId', userId).eq('itemId', args.itemId),
+      )
       .first()
 
     if (item && item.isCustom) {
@@ -508,11 +637,16 @@ export const renameIncomeItem = mutation({
   returns: v.boolean(),
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx)
-    if (!userId) throw new Error('Not authenticated')
+    requireAuth(userId)
+
+    validateNonEmptyString(args.name, 'Název')
+    validateMaxLength(args.name, 200, 'Název')
 
     const item = await ctx.db
       .query('incomeItems')
-      .withIndex('by_userId_and_itemId', (q) => q.eq('userId', userId).eq('itemId', args.itemId))
+      .withIndex('by_userId_and_itemId', (q) =>
+        q.eq('userId', userId).eq('itemId', args.itemId),
+      )
       .first()
 
     if (item && item.isCustom) {
@@ -528,7 +662,7 @@ export const initializeCalculatorForUser = mutation({
   returns: v.boolean(),
   handler: async (ctx) => {
     const userId = await auth.getUserId(ctx)
-    if (!userId) throw new Error('Not authenticated')
+    requireAuth(userId)
 
     // Check if user already has calculator data
     const existingData = await ctx.db

@@ -10,6 +10,8 @@
 
 import type * as auth from "../auth.js";
 import type * as calculator from "../calculator.js";
+import type * as errors from "../errors.js";
+import type * as feedback from "../feedback.js";
 import type * as http from "../http.js";
 import type * as users from "../users.js";
 
@@ -22,6 +24,8 @@ import type {
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   calculator: typeof calculator;
+  errors: typeof errors;
+  feedback: typeof feedback;
   http: typeof http;
   users: typeof users;
 }>;
