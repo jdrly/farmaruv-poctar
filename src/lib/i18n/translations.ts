@@ -28,6 +28,12 @@ export interface Translations {
     loading: string
     error: string
     retry: string
+    save: string
+    cancel: string
+    delete: string
+    add: string
+    edit: string
+    currency: string
   }
   nav: {
     calculator: string
@@ -36,6 +42,38 @@ export interface Translations {
     feedback: string
     info: string
     signOut: string
+  }
+  calculator: {
+    title: string
+    description: string
+    animalCount: string
+    animalCountPlaceholder: string
+    expenses: string
+    expensesDescription: string
+    income: string
+    incomeDescription: string
+    item: string
+    value: string
+    addCustomItem: string
+    customItemTooltip: string
+    customItemPlaceholder: string
+    summary: string
+    totalMonthlyExpenses: string
+    totalYearlyExpenses: string
+    totalMonthlyIncome: string
+    totalYearlyIncome: string
+    monthlyPerAnimal: string
+    yearlyPerAnimal: string
+    overallStatus: string
+    monthlyBalance: string
+    yearlyBalance: string
+    noAnimalCount: string
+    profit: string
+    loss: string
+    initializingData: string
+    errorInitializing: string
+    errorSaving: string
+    errorDeleting: string
   }
 }
 
@@ -68,6 +106,12 @@ export const translations: Record<Language, Translations> = {
       loading: 'Načítání...',
       error: 'Došlo k chybě',
       retry: 'Zkusit znovu',
+      save: 'Uložit',
+      cancel: 'Zrušit',
+      delete: 'Smazat',
+      add: 'Přidat',
+      edit: 'Upravit',
+      currency: 'Kč',
     },
     nav: {
       calculator: 'Kalkulačka',
@@ -76,6 +120,38 @@ export const translations: Record<Language, Translations> = {
       feedback: 'Zpětná vazba',
       info: 'Informace',
       signOut: 'Odhlásit se',
+    },
+    calculator: {
+      title: 'Kalkulačka nákladů chovu',
+      description: 'Finanční kalkulačka pro drobné chovatele králíků a drůbeže.',
+      animalCount: 'Počet chovaných zvířat',
+      animalCountPlaceholder: 'Zadejte počet zvířat',
+      expenses: 'Náklady na chov',
+      expensesDescription: 'Zadejte své náklady na krmivo, vybavení, veterinární péči a další.',
+      income: 'Příjmy',
+      incomeDescription: 'Zadejte příjmy z prodeje masa, vajec, živých zvířat a dotací.',
+      item: 'Položka',
+      value: 'Hodnota',
+      addCustomItem: '+ Přidat vlastní položku',
+      customItemTooltip: 'Počítá se jako hodnota za měsíc',
+      customItemPlaceholder: 'Vlastní položka',
+      summary: 'Souhrn',
+      totalMonthlyExpenses: 'Celkové měsíční náklady',
+      totalYearlyExpenses: 'Celkové roční náklady',
+      totalMonthlyIncome: 'Celkové měsíční příjmy',
+      totalYearlyIncome: 'Celkové roční příjmy',
+      monthlyPerAnimal: 'Měsíční náklad na 1 zvíře',
+      yearlyPerAnimal: 'Roční náklad na 1 zvíře',
+      overallStatus: 'Celkový stav chovu',
+      monthlyBalance: 'Měsíční bilance',
+      yearlyBalance: 'Roční bilance',
+      noAnimalCount: '—',
+      profit: 'Zisk',
+      loss: 'Ztráta',
+      initializingData: 'Inicializace dat...',
+      errorInitializing: 'Nepodařilo se inicializovat kalkulačku. Obnovte prosím stránku.',
+      errorSaving: 'Nepodařilo se uložit. Zkuste to prosím znovu.',
+      errorDeleting: 'Nepodařilo se smazat položku. Zkuste to prosím znovu.',
     },
   },
   en: {
@@ -106,6 +182,12 @@ export const translations: Record<Language, Translations> = {
       loading: 'Loading...',
       error: 'An error occurred',
       retry: 'Try again',
+      save: 'Save',
+      cancel: 'Cancel',
+      delete: 'Delete',
+      add: 'Add',
+      edit: 'Edit',
+      currency: 'CZK',
     },
     nav: {
       calculator: 'Calculator',
@@ -114,6 +196,38 @@ export const translations: Record<Language, Translations> = {
       feedback: 'Feedback',
       info: 'Information',
       signOut: 'Sign out',
+    },
+    calculator: {
+      title: 'Breeding Cost Calculator',
+      description: 'Financial calculator for small-scale rabbit and poultry breeders.',
+      animalCount: 'Number of animals',
+      animalCountPlaceholder: 'Enter number of animals',
+      expenses: 'Breeding Expenses',
+      expensesDescription: 'Enter your costs for feed, equipment, veterinary care, and more.',
+      income: 'Income',
+      incomeDescription: 'Enter income from meat sales, eggs, live animals, and subsidies.',
+      item: 'Item',
+      value: 'Value',
+      addCustomItem: '+ Add custom item',
+      customItemTooltip: 'Calculated as monthly value',
+      customItemPlaceholder: 'Custom item',
+      summary: 'Summary',
+      totalMonthlyExpenses: 'Total Monthly Expenses',
+      totalYearlyExpenses: 'Total Yearly Expenses',
+      totalMonthlyIncome: 'Total Monthly Income',
+      totalYearlyIncome: 'Total Yearly Income',
+      monthlyPerAnimal: 'Monthly cost per animal',
+      yearlyPerAnimal: 'Yearly cost per animal',
+      overallStatus: 'Overall Status',
+      monthlyBalance: 'Monthly Balance',
+      yearlyBalance: 'Yearly Balance',
+      noAnimalCount: '—',
+      profit: 'Profit',
+      loss: 'Loss',
+      initializingData: 'Initializing data...',
+      errorInitializing: 'Failed to initialize calculator. Please refresh the page.',
+      errorSaving: 'Failed to save. Please try again.',
+      errorDeleting: 'Failed to delete item. Please try again.',
     },
   },
 }

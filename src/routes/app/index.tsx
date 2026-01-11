@@ -1,6 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Calculator, TrendingUp, PiggyBank } from 'lucide-react'
+import { AlertCircle, Calculator, TrendingDown, TrendingUp } from 'lucide-react'
+import { useState } from 'react'
 
+import { AnimalCountInput, ItemTable, SummaryCard } from '@/components/calculator'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { useCalculator } from '@/hooks/useCalculator'
 import { useTranslation } from '@/hooks/useTranslation'
 
 export const Route = createFileRoute('/app/')({
@@ -9,56 +14,165 @@ export const Route = createFileRoute('/app/')({
 
 function CalculatorPage() {
   const { t } = useTranslation()
+  const {
+    animalCount,
+    expenses,
+    incomes,
+    isPending,
+    error,
+    monthlyExpenses,
+    yearlyExpenses,
+    monthlyIncome,
+    yearlyIncome,
+    monthlyProfit,
+    yearlyProfit,
+    monthlyPerAnimal,
+    yearlyPerAnimal,
+    saveAnimalCount,
+    updateExpenseValue,
+    updateIncomeValue,
+    addCustomExpense,
+    addCustomIncome,
+    deleteExpense,
+    deleteIncome,
+    renameExpense,
+    renameIncome,
+    formatCurrency,
+    monthlyExpenseExclusions,
+    monthlyIncomeExclusions,
+  } = useCalculator()
 
-  const features = [
-    {
-      icon: <Calculator className="h-10 w-10 text-emerald-500" />,
-      title: 'Přehled nákladů',
-      description:
-        'Sledujte všechny náklady na chov - krmivo, veterinární péči, vybavení a další.',
-    },
-    {
-      icon: <TrendingUp className="h-10 w-10 text-emerald-500" />,
-      title: 'Příjmy a zisky',
-      description:
-        'Evidujte příjmy z prodeje masa, vajec, živých zvířat a dotací.',
-    },
-    {
-      icon: <PiggyBank className="h-10 w-10 text-emerald-500" />,
-      title: 'Náklady na zvíře',
-      description:
-        'Zjistěte přesné náklady na jedno zvíře pro lepší plánování.',
-    },
-  ]
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+
+  async function handleAddCustomExpense() {
+    try {
+      await addCustomExpense(t.calculator.customItemPlaceholder)
+      setErrorMessage(null)
+    } catch {
+      setErrorMessage(t.calculator.errorSaving)
+    }
+  }
+
+  async function handleAddCustomIncome() {
+    try {
+      await addCustomIncome(t.calculator.customItemPlaceholder)
+      setErrorMessage(null)
+    } catch {
+      setErrorMessage(t.calculator.errorSaving)
+    }
+  }
+
+  async function handleDeleteExpense(itemId: string) {
+    try {
+      await deleteExpense(itemId)
+      setErrorMessage(null)
+    } catch {
+      setErrorMessage(t.calculator.errorDeleting)
+    }
+  }
+
+  async function handleDeleteIncome(itemId: string) {
+    try {
+      await deleteIncome(itemId)
+      setErrorMessage(null)
+    } catch {
+      setErrorMessage(t.calculator.errorDeleting)
+    }
+  }
 
   return (
-    <div className="p-6">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">{t.nav.calculator}</h1>
-        <p className="mt-2 text-muted-foreground">
-          Finanční kalkulačka pro drobné chovatele králíků a drůbeže.
-        </p>
+    <div className="space-y-8 p-6">
+      {/* Header */}
+      <div>
+        <h1 className="flex items-center gap-3 text-3xl font-bold tracking-tight">
+          <Calculator className="h-8 w-8 text-emerald-600" />
+          {t.calculator.title}
+        </h1>
+        <p className="mt-2 text-muted-foreground">{t.calculator.description}</p>
       </div>
 
-      {/* Placeholder content - will be replaced with actual calculator in Phase 5 */}
-      <div className="grid gap-6 md:grid-cols-3">
-        {features.map((feature, index) => (
-          <div
-            key={index}
-            className="rounded-xl border bg-card p-6 shadow-sm transition-shadow hover:shadow-md"
-          >
-            <div className="mb-4">{feature.icon}</div>
-            <h3 className="mb-2 text-lg font-semibold">{feature.title}</h3>
-            <p className="text-sm text-muted-foreground">{feature.description}</p>
-          </div>
-        ))}
+      {/* Error Display */}
+      {(error || errorMessage) && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>{t.common.error}</AlertTitle>
+          <AlertDescription>
+            {errorMessage ?? error?.message ?? t.calculator.errorInitializing}
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {/* Animal Count */}
+      <Card>
+        <CardContent className="pt-6">
+          <AnimalCountInput
+            value={animalCount}
+            onChange={saveAnimalCount}
+            isLoading={isPending}
+          />
+        </CardContent>
+      </Card>
+
+      {/* Expenses and Income Tables */}
+      <div className="grid gap-8 lg:grid-cols-2">
+        {/* Expenses */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingDown className="h-5 w-5 text-amber-600" />
+              {t.calculator.expenses}
+            </CardTitle>
+            <CardDescription>{t.calculator.expensesDescription}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ItemTable
+              items={expenses}
+              isLoading={isPending}
+              readOnlyItemIds={monthlyExpenseExclusions}
+              onValueChange={updateExpenseValue}
+              onNameChange={renameExpense}
+              onDelete={handleDeleteExpense}
+              onAddCustom={handleAddCustomExpense}
+            />
+          </CardContent>
+        </Card>
+
+        {/* Income */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-emerald-600" />
+              {t.calculator.income}
+            </CardTitle>
+            <CardDescription>{t.calculator.incomeDescription}</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ItemTable
+              items={incomes}
+              isLoading={isPending}
+              readOnlyItemIds={monthlyIncomeExclusions}
+              onValueChange={updateIncomeValue}
+              onNameChange={renameIncome}
+              onDelete={handleDeleteIncome}
+              onAddCustom={handleAddCustomIncome}
+            />
+          </CardContent>
+        </Card>
       </div>
 
-      <div className="mt-8 rounded-xl border border-dashed border-muted-foreground/25 bg-muted/50 p-8 text-center">
-        <p className="text-muted-foreground">
-          Kalkulačka bude implementována v další fázi vývoje.
-        </p>
-      </div>
+      {/* Summary */}
+      <SummaryCard
+        monthlyExpenses={monthlyExpenses}
+        yearlyExpenses={yearlyExpenses}
+        monthlyIncome={monthlyIncome}
+        yearlyIncome={yearlyIncome}
+        monthlyProfit={monthlyProfit}
+        yearlyProfit={yearlyProfit}
+        monthlyPerAnimal={monthlyPerAnimal}
+        yearlyPerAnimal={yearlyPerAnimal}
+        formatCurrency={formatCurrency}
+        isLoading={isPending}
+      />
     </div>
   )
 }
