@@ -65,14 +65,6 @@ function LoginPage() {
     }
   }
 
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-emerald-950 via-slate-900 to-slate-950">
-        <div className="animate-pulse text-emerald-400">{t.common.loading}</div>
-      </div>
-    )
-  }
-
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-emerald-950 via-slate-900 to-slate-950 p-4">
       {/* Decorative background elements */}
