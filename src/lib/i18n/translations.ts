@@ -16,6 +16,11 @@ export interface Translations {
     signUpLink: string
     signInLink: string
     error: string
+    errorInvalidCredentials: string
+    errorEmailInUse: string
+    errorWeakPassword: string
+    errorNetworkError: string
+    errorGeneric: string
     termsAgreement: string
     termsOfService: string
     and: string
@@ -75,6 +80,11 @@ export interface Translations {
     errorSaving: string
     errorDeleting: string
   }
+  notFound: {
+    title: string
+    message: string
+    backToHome: string
+  }
 }
 
 export const translations: Record<Language, Translations> = {
@@ -94,6 +104,11 @@ export const translations: Record<Language, Translations> = {
       signUpLink: 'Zaregistrujte se',
       signInLink: 'Přihlaste se',
       error: 'Chyba:',
+      errorInvalidCredentials: 'Nesprávný email nebo heslo. Zkuste to prosím znovu.',
+      errorEmailInUse: 'Tento email je již registrován. Zkuste se přihlásit.',
+      errorWeakPassword: 'Heslo musí mít alespoň 8 znaků.',
+      errorNetworkError: 'Problém s připojením. Zkontrolujte internet a zkuste to znovu.',
+      errorGeneric: 'Něco se pokazilo. Zkuste to prosím znovu.',
       termsAgreement: 'Kliknutím na pokračovat souhlasíte s našimi',
       termsOfService: 'Podmínkami služby',
       and: 'a',
@@ -153,6 +168,11 @@ export const translations: Record<Language, Translations> = {
       errorSaving: 'Nepodařilo se uložit. Zkuste to prosím znovu.',
       errorDeleting: 'Nepodařilo se smazat položku. Zkuste to prosím znovu.',
     },
+    notFound: {
+      title: '404',
+      message: 'Stránka nenalezena',
+      backToHome: 'Zpět na úvodní stránku',
+    },
   },
   en: {
     auth: {
@@ -170,6 +190,11 @@ export const translations: Record<Language, Translations> = {
       signUpLink: 'Sign up',
       signInLink: 'Sign in',
       error: 'Error:',
+      errorInvalidCredentials: 'Invalid email or password. Please try again.',
+      errorEmailInUse: 'This email is already registered. Try signing in instead.',
+      errorWeakPassword: 'Password must be at least 8 characters long.',
+      errorNetworkError: 'Connection problem. Check your internet and try again.',
+      errorGeneric: 'Something went wrong. Please try again.',
       termsAgreement: 'By clicking continue, you agree to our',
       termsOfService: 'Terms of Service',
       and: 'and',
@@ -228,6 +253,11 @@ export const translations: Record<Language, Translations> = {
       errorInitializing: 'Failed to initialize calculator. Please refresh the page.',
       errorSaving: 'Failed to save. Please try again.',
       errorDeleting: 'Failed to delete item. Please try again.',
+    },
+    notFound: {
+      title: '404',
+      message: 'Page not found',
+      backToHome: 'Back to home',
     },
   },
 }

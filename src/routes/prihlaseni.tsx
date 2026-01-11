@@ -31,6 +31,25 @@ function LoginPage() {
     }
   }, [isAuthenticated, isLoading, navigate])
 
+  function getErrorMessage(error: unknown): string {
+    const message = error instanceof Error ? error.message.toLowerCase() : ''
+
+    if (message.includes('invalid') || message.includes('credentials') || message.includes('password') || message.includes('user')) {
+      return t.auth.errorInvalidCredentials
+    }
+    if (message.includes('already') || message.includes('exists') || message.includes('in use')) {
+      return t.auth.errorEmailInUse
+    }
+    if (message.includes('weak') || message.includes('short') || message.includes('8')) {
+      return t.auth.errorWeakPassword
+    }
+    if (message.includes('network') || message.includes('fetch') || message.includes('connection')) {
+      return t.auth.errorNetworkError
+    }
+
+    return t.auth.errorGeneric
+  }
+
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setError(null)
@@ -40,7 +59,7 @@ function LoginPage() {
     try {
       await signIn('password', formData)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Authentication failed')
+      setError(getErrorMessage(err))
     } finally {
       setIsSubmitting(false)
     }
@@ -173,9 +192,7 @@ function LoginPage() {
               {/* Error message */}
               {error && (
                 <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-3 backdrop-blur-sm">
-                  <p className="text-sm text-red-300">
-                    {t.auth.error} {error}
-                  </p>
+                  <p className="text-sm text-red-300">{error}</p>
                 </div>
               )}
             </div>
