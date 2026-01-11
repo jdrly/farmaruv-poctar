@@ -10,11 +10,16 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PrihlaseniRouteImport } from './routes/prihlaseni'
+import { Route as GdprRouteImport } from './routes/gdpr'
+import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 import { Route as DemoTableRouteImport } from './routes/demo/table'
 import { Route as DemoStoreRouteImport } from './routes/demo/store'
 import { Route as DemoConvexRouteImport } from './routes/demo/convex'
+import { Route as AppZpetnaVazbaRouteImport } from './routes/app/zpetna-vazba'
+import { Route as AppHodnotyOdChovateluRouteImport } from './routes/app/hodnoty-od-chovatelu'
 import { Route as DemoStartServerFuncsRouteImport } from './routes/demo/start.server-funcs'
 import { Route as DemoStartApiRequestRouteImport } from './routes/demo/start.api-request'
 import { Route as DemoFormSimpleRouteImport } from './routes/demo/form.simple'
@@ -31,10 +36,25 @@ const PrihlaseniRoute = PrihlaseniRouteImport.update({
   path: '/prihlaseni',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GdprRoute = GdprRouteImport.update({
+  id: '/gdpr',
+  path: '/gdpr',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRoute = AppRouteImport.update({
+  id: '/app',
+  path: '/app',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppRoute,
 } as any)
 const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
   id: '/demo/tanstack-query',
@@ -55,6 +75,16 @@ const DemoConvexRoute = DemoConvexRouteImport.update({
   id: '/demo/convex',
   path: '/demo/convex',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AppZpetnaVazbaRoute = AppZpetnaVazbaRouteImport.update({
+  id: '/zpetna-vazba',
+  path: '/zpetna-vazba',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppHodnotyOdChovateluRoute = AppHodnotyOdChovateluRouteImport.update({
+  id: '/hodnoty-od-chovatelu',
+  path: '/hodnoty-od-chovatelu',
+  getParentRoute: () => AppRoute,
 } as any)
 const DemoStartServerFuncsRoute = DemoStartServerFuncsRouteImport.update({
   id: '/demo/start/server-funcs',
@@ -109,11 +139,16 @@ const DemoStartSsrDataOnlyRoute = DemoStartSsrDataOnlyRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/gdpr': typeof GdprRoute
   '/prihlaseni': typeof PrihlaseniRoute
+  '/app/hodnoty-od-chovatelu': typeof AppHodnotyOdChovateluRoute
+  '/app/zpetna-vazba': typeof AppZpetnaVazbaRoute
   '/demo/convex': typeof DemoConvexRoute
   '/demo/store': typeof DemoStoreRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/app/': typeof AppIndexRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
   '/demo/form/address': typeof DemoFormAddressRoute
@@ -127,11 +162,15 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/gdpr': typeof GdprRoute
   '/prihlaseni': typeof PrihlaseniRoute
+  '/app/hodnoty-od-chovatelu': typeof AppHodnotyOdChovateluRoute
+  '/app/zpetna-vazba': typeof AppZpetnaVazbaRoute
   '/demo/convex': typeof DemoConvexRoute
   '/demo/store': typeof DemoStoreRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/app': typeof AppIndexRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
   '/demo/form/address': typeof DemoFormAddressRoute
@@ -146,11 +185,16 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/app': typeof AppRouteWithChildren
+  '/gdpr': typeof GdprRoute
   '/prihlaseni': typeof PrihlaseniRoute
+  '/app/hodnoty-od-chovatelu': typeof AppHodnotyOdChovateluRoute
+  '/app/zpetna-vazba': typeof AppZpetnaVazbaRoute
   '/demo/convex': typeof DemoConvexRoute
   '/demo/store': typeof DemoStoreRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/app/': typeof AppIndexRoute
   '/demo/api/names': typeof DemoApiNamesRoute
   '/demo/api/tq-todos': typeof DemoApiTqTodosRoute
   '/demo/form/address': typeof DemoFormAddressRoute
@@ -166,11 +210,16 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/app'
+    | '/gdpr'
     | '/prihlaseni'
+    | '/app/hodnoty-od-chovatelu'
+    | '/app/zpetna-vazba'
     | '/demo/convex'
     | '/demo/store'
     | '/demo/table'
     | '/demo/tanstack-query'
+    | '/app/'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
     | '/demo/form/address'
@@ -184,11 +233,15 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/gdpr'
     | '/prihlaseni'
+    | '/app/hodnoty-od-chovatelu'
+    | '/app/zpetna-vazba'
     | '/demo/convex'
     | '/demo/store'
     | '/demo/table'
     | '/demo/tanstack-query'
+    | '/app'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
     | '/demo/form/address'
@@ -202,11 +255,16 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/app'
+    | '/gdpr'
     | '/prihlaseni'
+    | '/app/hodnoty-od-chovatelu'
+    | '/app/zpetna-vazba'
     | '/demo/convex'
     | '/demo/store'
     | '/demo/table'
     | '/demo/tanstack-query'
+    | '/app/'
     | '/demo/api/names'
     | '/demo/api/tq-todos'
     | '/demo/form/address'
@@ -221,6 +279,8 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AppRoute: typeof AppRouteWithChildren
+  GdprRoute: typeof GdprRoute
   PrihlaseniRoute: typeof PrihlaseniRoute
   DemoConvexRoute: typeof DemoConvexRoute
   DemoStoreRoute: typeof DemoStoreRoute
@@ -247,12 +307,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrihlaseniRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/gdpr': {
+      id: '/gdpr'
+      path: '/gdpr'
+      fullPath: '/gdpr'
+      preLoaderRoute: typeof GdprRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app': {
+      id: '/app'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/app/': {
+      id: '/app/'
+      path: '/'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
+      parentRoute: typeof AppRoute
     }
     '/demo/tanstack-query': {
       id: '/demo/tanstack-query'
@@ -281,6 +362,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/demo/convex'
       preLoaderRoute: typeof DemoConvexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/app/zpetna-vazba': {
+      id: '/app/zpetna-vazba'
+      path: '/zpetna-vazba'
+      fullPath: '/app/zpetna-vazba'
+      preLoaderRoute: typeof AppZpetnaVazbaRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/hodnoty-od-chovatelu': {
+      id: '/app/hodnoty-od-chovatelu'
+      path: '/hodnoty-od-chovatelu'
+      fullPath: '/app/hodnoty-od-chovatelu'
+      preLoaderRoute: typeof AppHodnotyOdChovateluRouteImport
+      parentRoute: typeof AppRoute
     }
     '/demo/start/server-funcs': {
       id: '/demo/start/server-funcs'
@@ -355,8 +450,24 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AppRouteChildren {
+  AppHodnotyOdChovateluRoute: typeof AppHodnotyOdChovateluRoute
+  AppZpetnaVazbaRoute: typeof AppZpetnaVazbaRoute
+  AppIndexRoute: typeof AppIndexRoute
+}
+
+const AppRouteChildren: AppRouteChildren = {
+  AppHodnotyOdChovateluRoute: AppHodnotyOdChovateluRoute,
+  AppZpetnaVazbaRoute: AppZpetnaVazbaRoute,
+  AppIndexRoute: AppIndexRoute,
+}
+
+const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AppRoute: AppRouteWithChildren,
+  GdprRoute: GdprRoute,
   PrihlaseniRoute: PrihlaseniRoute,
   DemoConvexRoute: DemoConvexRoute,
   DemoStoreRoute: DemoStoreRoute,
