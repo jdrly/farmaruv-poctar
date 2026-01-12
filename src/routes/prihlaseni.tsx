@@ -82,7 +82,7 @@ function LoginPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-gradient-to-br from-emerald-950 via-slate-900 to-slate-950 p-4">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-linear-to-br from-emerald-950 via-slate-900 to-slate-950 p-4">
       {/* Decorative background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -left-40 -top-40 h-96 w-96 rounded-full bg-emerald-500/10 blur-3xl" />
@@ -108,7 +108,7 @@ function LoginPage() {
             <div className="flex flex-col gap-6">
               {/* Header */}
               <div className="flex flex-col items-center text-center">
-                <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 to-emerald-600 shadow-lg shadow-emerald-500/30">
+                <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-linear-to-br from-emerald-400 to-emerald-600 shadow-lg shadow-emerald-500/30">
                   <Leaf className="h-7 w-7 text-white" />
                 </div>
                 <h1 className="text-2xl font-bold tracking-tight text-white">
@@ -171,7 +171,7 @@ function LoginPage() {
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 font-semibold text-white shadow-lg shadow-emerald-500/30 transition-all hover:from-emerald-400 hover:to-emerald-500 hover:shadow-emerald-500/40 disabled:opacity-50"
+                className="w-full bg-linear-to-r from-emerald-500 to-emerald-600 font-semibold text-white shadow-lg shadow-emerald-500/30 transition-all hover:from-emerald-400 hover:to-emerald-500 hover:shadow-emerald-500/40 disabled:opacity-50"
               >
                 {isSubmitting
                   ? flow === 'signIn'
@@ -213,8 +213,8 @@ function LoginPage() {
               alt={t.auth.title}
               className="absolute inset-0 h-full w-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-900/80 via-transparent to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-slate-900/90 to-transparent p-8">
+            <div className="absolute inset-0 bg-linear-to-r from-slate-900/80 via-transparent to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-slate-900/90 to-transparent p-8">
               <p className="text-sm text-white/70">
                 {t.auth.termsAgreement}{' '}
                 <a
