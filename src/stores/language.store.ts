@@ -1,4 +1,4 @@
-import { Store, Effect } from '@tanstack/store'
+import { Effect, Store } from '@tanstack/store'
 
 export type Language = 'cs' | 'en'
 

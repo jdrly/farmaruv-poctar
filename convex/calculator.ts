@@ -3,9 +3,9 @@ import { mutation, query } from './_generated/server'
 import { auth } from './auth'
 import {
   requireAuth,
-  validatePositiveNumber,
-  validateNonEmptyString,
   validateMaxLength,
+  validateNonEmptyString,
+  validatePositiveNumber,
 } from './errors'
 
 // ============ VALIDATORS (exported for frontend type inference) ============

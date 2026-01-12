@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useAuthActions } from '@convex-dev/auth/react'
 import { useConvexAuth } from 'convex/react'
-import { useState, useEffect } from 'react'
-import { Leaf, Globe } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Globe, Leaf } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'

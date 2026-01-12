@@ -1,6 +1,7 @@
 import { Trash2 } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
+import type { ExpenseItem, IncomeItem } from '@/hooks/useCalculator'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -19,12 +20,11 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip'
 import { useTranslation } from '@/hooks/useTranslation'
-import type { ExpenseItem, IncomeItem } from '@/hooks/useCalculator'
 
 interface ItemTableProps {
-  items: (ExpenseItem | IncomeItem)[]
+  items: Array<ExpenseItem | IncomeItem>
   isLoading?: boolean
-  readOnlyItemIds: string[]
+  readOnlyItemIds: Array<string>
   onValueChange: (itemId: string, value: number | null) => void
   onNameChange: (itemId: string, name: string) => void
   onDelete: (itemId: string) => void

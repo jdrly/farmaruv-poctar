@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useMutation } from 'convex/react'
 import { convexQuery } from '@convex-dev/react-query'
-import { useCallback, useEffect, useRef, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { api } from '../../convex/_generated/api'
 
@@ -34,8 +34,8 @@ export interface IncomeItem {
 
 export interface CalculatorData {
   animalCount: number | null
-  expenses: ExpenseItem[]
-  incomes: IncomeItem[]
+  expenses: Array<ExpenseItem>
+  incomes: Array<IncomeItem>
   isInitialized: boolean
 }
 

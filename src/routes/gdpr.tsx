@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { Link, createFileRoute } from '@tanstack/react-router'
 import { ArrowLeft, Shield } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'

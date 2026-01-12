@@ -1,4 +1,4 @@
-import { TrendingDown, TrendingUp, DollarSign, PiggyBank } from 'lucide-react'
+import { DollarSign, PiggyBank, TrendingDown, TrendingUp } from 'lucide-react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
