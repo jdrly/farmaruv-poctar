@@ -7,7 +7,7 @@ import {
 } from '@tanstack/react-router'
 import { useConvexAuth } from 'convex/react'
 import { Leaf } from 'lucide-react'
-import { useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 
 import { AppSidebar } from '@/components/AppSidebar'
 import {
@@ -113,18 +113,18 @@ function AppLayout() {
                 const isLast = index === breadcrumbs.length - 1
 
                 return (
-                  <BreadcrumbItem key={crumb.path}>
-                    {isLast ? (
-                      <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
-                    ) : (
-                      <>
+                  <Fragment key={crumb.path}>
+                    <BreadcrumbItem>
+                      {isLast ? (
+                        <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
+                      ) : (
                         <BreadcrumbLink asChild>
                           <Link to={crumb.path}>{crumb.label}</Link>
                         </BreadcrumbLink>
-                        <BreadcrumbSeparator />
-                      </>
-                    )}
-                  </BreadcrumbItem>
+                      )}
+                    </BreadcrumbItem>
+                    {!isLast && <BreadcrumbSeparator />}
+                  </Fragment>
                 )
               })}
             </BreadcrumbList>
