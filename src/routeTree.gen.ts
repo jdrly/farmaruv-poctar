@@ -18,187 +18,164 @@ import { Route as AppZpetnaVazbaRouteImport } from './routes/app/zpetna-vazba'
 import { Route as AppHodnotyOdChovateluRouteImport } from './routes/app/hodnoty-od-chovatelu'
 
 const PrihlaseniRoute = PrihlaseniRouteImport.update({
-  id: '/prihlaseni',
-  path: '/prihlaseni',
-  getParentRoute: () => rootRouteImport,
+    id: '/prihlaseni',
+    path: '/prihlaseni',
+    getParentRoute: () => rootRouteImport,
 } as any)
 const GdprRoute = GdprRouteImport.update({
-  id: '/gdpr',
-  path: '/gdpr',
-  getParentRoute: () => rootRouteImport,
+    id: '/gdpr',
+    path: '/gdpr',
+    getParentRoute: () => rootRouteImport,
 } as any)
 const AppRoute = AppRouteImport.update({
-  id: '/app',
-  path: '/app',
-  getParentRoute: () => rootRouteImport,
+    id: '/app',
+    path: '/app',
+    getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
+    id: '/',
+    path: '/',
+    getParentRoute: () => rootRouteImport,
 } as any)
 const AppIndexRoute = AppIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AppRoute,
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppRoute,
 } as any)
 const AppZpetnaVazbaRoute = AppZpetnaVazbaRouteImport.update({
-  id: '/zpetna-vazba',
-  path: '/zpetna-vazba',
-  getParentRoute: () => AppRoute,
+    id: '/zpetna-vazba',
+    path: '/zpetna-vazba',
+    getParentRoute: () => AppRoute,
 } as any)
 const AppHodnotyOdChovateluRoute = AppHodnotyOdChovateluRouteImport.update({
-  id: '/hodnoty-od-chovatelu',
-  path: '/hodnoty-od-chovatelu',
-  getParentRoute: () => AppRoute,
+    id: '/hodnoty-od-chovatelu',
+    path: '/hodnoty-od-chovatelu',
+    getParentRoute: () => AppRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/app': typeof AppRouteWithChildren
-  '/gdpr': typeof GdprRoute
-  '/prihlaseni': typeof PrihlaseniRoute
-  '/app/hodnoty-od-chovatelu': typeof AppHodnotyOdChovateluRoute
-  '/app/zpetna-vazba': typeof AppZpetnaVazbaRoute
-  '/app/': typeof AppIndexRoute
+    '/': typeof IndexRoute
+    '/app': typeof AppRouteWithChildren
+    '/gdpr': typeof GdprRoute
+    '/prihlaseni': typeof PrihlaseniRoute
+    '/app/hodnoty-od-chovatelu': typeof AppHodnotyOdChovateluRoute
+    '/app/zpetna-vazba': typeof AppZpetnaVazbaRoute
+    '/app/': typeof AppIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/gdpr': typeof GdprRoute
-  '/prihlaseni': typeof PrihlaseniRoute
-  '/app/hodnoty-od-chovatelu': typeof AppHodnotyOdChovateluRoute
-  '/app/zpetna-vazba': typeof AppZpetnaVazbaRoute
-  '/app': typeof AppIndexRoute
+    '/': typeof IndexRoute
+    '/gdpr': typeof GdprRoute
+    '/prihlaseni': typeof PrihlaseniRoute
+    '/app/hodnoty-od-chovatelu': typeof AppHodnotyOdChovateluRoute
+    '/app/zpetna-vazba': typeof AppZpetnaVazbaRoute
+    '/app': typeof AppIndexRoute
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/app': typeof AppRouteWithChildren
-  '/gdpr': typeof GdprRoute
-  '/prihlaseni': typeof PrihlaseniRoute
-  '/app/hodnoty-od-chovatelu': typeof AppHodnotyOdChovateluRoute
-  '/app/zpetna-vazba': typeof AppZpetnaVazbaRoute
-  '/app/': typeof AppIndexRoute
+    __root__: typeof rootRouteImport
+    '/': typeof IndexRoute
+    '/app': typeof AppRouteWithChildren
+    '/gdpr': typeof GdprRoute
+    '/prihlaseni': typeof PrihlaseniRoute
+    '/app/hodnoty-od-chovatelu': typeof AppHodnotyOdChovateluRoute
+    '/app/zpetna-vazba': typeof AppZpetnaVazbaRoute
+    '/app/': typeof AppIndexRoute
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths:
-    | '/'
-    | '/app'
-    | '/gdpr'
-    | '/prihlaseni'
-    | '/app/hodnoty-od-chovatelu'
-    | '/app/zpetna-vazba'
-    | '/app/'
-  fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/gdpr'
-    | '/prihlaseni'
-    | '/app/hodnoty-od-chovatelu'
-    | '/app/zpetna-vazba'
-    | '/app'
-  id:
-    | '__root__'
-    | '/'
-    | '/app'
-    | '/gdpr'
-    | '/prihlaseni'
-    | '/app/hodnoty-od-chovatelu'
-    | '/app/zpetna-vazba'
-    | '/app/'
-  fileRoutesById: FileRoutesById
+    fileRoutesByFullPath: FileRoutesByFullPath
+    fullPaths: '/' | '/app' | '/gdpr' | '/prihlaseni' | '/app/hodnoty-od-chovatelu' | '/app/zpetna-vazba' | '/app/'
+    fileRoutesByTo: FileRoutesByTo
+    to: '/' | '/gdpr' | '/prihlaseni' | '/app/hodnoty-od-chovatelu' | '/app/zpetna-vazba' | '/app'
+    id: '__root__' | '/' | '/app' | '/gdpr' | '/prihlaseni' | '/app/hodnoty-od-chovatelu' | '/app/zpetna-vazba' | '/app/'
+    fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AppRoute: typeof AppRouteWithChildren
-  GdprRoute: typeof GdprRoute
-  PrihlaseniRoute: typeof PrihlaseniRoute
+    IndexRoute: typeof IndexRoute
+    AppRoute: typeof AppRouteWithChildren
+    GdprRoute: typeof GdprRoute
+    PrihlaseniRoute: typeof PrihlaseniRoute
 }
 
 declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/prihlaseni': {
-      id: '/prihlaseni'
-      path: '/prihlaseni'
-      fullPath: '/prihlaseni'
-      preLoaderRoute: typeof PrihlaseniRouteImport
-      parentRoute: typeof rootRouteImport
+    interface FileRoutesByPath {
+        '/prihlaseni': {
+            id: '/prihlaseni'
+            path: '/prihlaseni'
+            fullPath: '/prihlaseni'
+            preLoaderRoute: typeof PrihlaseniRouteImport
+            parentRoute: typeof rootRouteImport
+        }
+        '/gdpr': {
+            id: '/gdpr'
+            path: '/gdpr'
+            fullPath: '/gdpr'
+            preLoaderRoute: typeof GdprRouteImport
+            parentRoute: typeof rootRouteImport
+        }
+        '/app': {
+            id: '/app'
+            path: '/app'
+            fullPath: '/app'
+            preLoaderRoute: typeof AppRouteImport
+            parentRoute: typeof rootRouteImport
+        }
+        '/': {
+            id: '/'
+            path: '/'
+            fullPath: '/'
+            preLoaderRoute: typeof IndexRouteImport
+            parentRoute: typeof rootRouteImport
+        }
+        '/app/': {
+            id: '/app/'
+            path: '/'
+            fullPath: '/app/'
+            preLoaderRoute: typeof AppIndexRouteImport
+            parentRoute: typeof AppRoute
+        }
+        '/app/zpetna-vazba': {
+            id: '/app/zpetna-vazba'
+            path: '/zpetna-vazba'
+            fullPath: '/app/zpetna-vazba'
+            preLoaderRoute: typeof AppZpetnaVazbaRouteImport
+            parentRoute: typeof AppRoute
+        }
+        '/app/hodnoty-od-chovatelu': {
+            id: '/app/hodnoty-od-chovatelu'
+            path: '/hodnoty-od-chovatelu'
+            fullPath: '/app/hodnoty-od-chovatelu'
+            preLoaderRoute: typeof AppHodnotyOdChovateluRouteImport
+            parentRoute: typeof AppRoute
+        }
     }
-    '/gdpr': {
-      id: '/gdpr'
-      path: '/gdpr'
-      fullPath: '/gdpr'
-      preLoaderRoute: typeof GdprRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/app': {
-      id: '/app'
-      path: '/app'
-      fullPath: '/app'
-      preLoaderRoute: typeof AppRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/app/': {
-      id: '/app/'
-      path: '/'
-      fullPath: '/app/'
-      preLoaderRoute: typeof AppIndexRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/zpetna-vazba': {
-      id: '/app/zpetna-vazba'
-      path: '/zpetna-vazba'
-      fullPath: '/app/zpetna-vazba'
-      preLoaderRoute: typeof AppZpetnaVazbaRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/hodnoty-od-chovatelu': {
-      id: '/app/hodnoty-od-chovatelu'
-      path: '/hodnoty-od-chovatelu'
-      fullPath: '/app/hodnoty-od-chovatelu'
-      preLoaderRoute: typeof AppHodnotyOdChovateluRouteImport
-      parentRoute: typeof AppRoute
-    }
-  }
 }
 
 interface AppRouteChildren {
-  AppHodnotyOdChovateluRoute: typeof AppHodnotyOdChovateluRoute
-  AppZpetnaVazbaRoute: typeof AppZpetnaVazbaRoute
-  AppIndexRoute: typeof AppIndexRoute
+    AppHodnotyOdChovateluRoute: typeof AppHodnotyOdChovateluRoute
+    AppZpetnaVazbaRoute: typeof AppZpetnaVazbaRoute
+    AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
-  AppHodnotyOdChovateluRoute: AppHodnotyOdChovateluRoute,
-  AppZpetnaVazbaRoute: AppZpetnaVazbaRoute,
-  AppIndexRoute: AppIndexRoute,
+    AppHodnotyOdChovateluRoute: AppHodnotyOdChovateluRoute,
+    AppZpetnaVazbaRoute: AppZpetnaVazbaRoute,
+    AppIndexRoute: AppIndexRoute,
 }
 
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AppRoute: AppRouteWithChildren,
-  GdprRoute: GdprRoute,
-  PrihlaseniRoute: PrihlaseniRoute,
+    IndexRoute: IndexRoute,
+    AppRoute: AppRouteWithChildren,
+    GdprRoute: GdprRoute,
+    PrihlaseniRoute: PrihlaseniRoute,
 }
-export const routeTree = rootRouteImport
-  ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+export const routeTree = rootRouteImport._addFileChildren(rootRouteChildren)._addFileTypes<FileRouteTypes>()
 
 import type { getRouter } from './router.tsx'
 import type { createStart } from '@tanstack/react-start'
 declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
+    interface Register {
+        ssr: true
+        router: Awaited<ReturnType<typeof getRouter>>
+    }
 }
