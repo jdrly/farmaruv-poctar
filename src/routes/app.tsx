@@ -33,7 +33,7 @@ export const Route = createFileRoute('/app')({
 function AppLayout() {
   const { isAuthenticated, isLoading } = useConvexAuth()
   const navigate = useNavigate()
-  const { t, language } = useTranslation()
+  const { t } = useTranslation()
   const matches = useMatches()
 
   useEffect(() => {
@@ -45,7 +45,7 @@ function AppLayout() {
   // Generate breadcrumbs from route matches
   // Get the last (deepest) match to determine current page
   const currentMatch = matches[matches.length - 1]
-  const currentPath = currentMatch?.pathname || '/app'
+  const currentPath = currentMatch.pathname
 
   // Build breadcrumb based on current path
   const breadcrumbItems: Array<{ path: string; label: string }> = []

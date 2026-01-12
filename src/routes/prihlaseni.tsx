@@ -4,7 +4,6 @@ import { useConvexAuth } from 'convex/react'
 import { useEffect, useState } from 'react'
 import { Globe, Leaf } from 'lucide-react'
 
-import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -31,19 +30,36 @@ function LoginPage() {
     }
   }, [isAuthenticated, isLoading, navigate])
 
-  function getErrorMessage(error: unknown): string {
-    const message = error instanceof Error ? error.message.toLowerCase() : ''
+  function getErrorMessage(err: unknown): string {
+    const message = err instanceof Error ? err.message.toLowerCase() : ''
 
-    if (message.includes('invalid') || message.includes('credentials') || message.includes('password') || message.includes('user')) {
+    if (
+      message.includes('invalid') ||
+      message.includes('credentials') ||
+      message.includes('password') ||
+      message.includes('user')
+    ) {
       return t.auth.errorInvalidCredentials
     }
-    if (message.includes('already') || message.includes('exists') || message.includes('in use')) {
+    if (
+      message.includes('already') ||
+      message.includes('exists') ||
+      message.includes('in use')
+    ) {
       return t.auth.errorEmailInUse
     }
-    if (message.includes('weak') || message.includes('short') || message.includes('8')) {
+    if (
+      message.includes('weak') ||
+      message.includes('short') ||
+      message.includes('8')
+    ) {
       return t.auth.errorWeakPassword
     }
-    if (message.includes('network') || message.includes('fetch') || message.includes('connection')) {
+    if (
+      message.includes('network') ||
+      message.includes('fetch') ||
+      message.includes('connection')
+    ) {
       return t.auth.errorNetworkError
     }
 

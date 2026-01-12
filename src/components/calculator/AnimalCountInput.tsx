@@ -22,7 +22,7 @@ export function AnimalCountInput({
 
   // Sync local value with prop
   useEffect(() => {
-    if (value === null || value === undefined) {
+    if (value === null) {
       setLocalValue('')
     } else {
       setLocalValue(value.toString())

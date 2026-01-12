@@ -7,7 +7,6 @@ import {
   ChevronDown,
   ChevronRight,
   FileText,
-  Globe,
   Info,
   Languages,
   Leaf,

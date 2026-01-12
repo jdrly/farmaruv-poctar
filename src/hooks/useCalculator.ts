@@ -79,7 +79,7 @@ export function useCalculator() {
   const initializeCalculatorMutation = useMutation(api.calculator.initializeCalculatorForUser)
 
   // Debounce timers
-  const saveTimersRef = useRef<Record<string, NodeJS.Timeout>>({})
+  const saveTimersRef = useRef<Record<string, NodeJS.Timeout | undefined>>({})
 
   // Cleanup timers on unmount
   useEffect(() => {
@@ -92,8 +92,9 @@ export function useCalculator() {
   // Debounce helper
   const debounceSave = useCallback(
     (key: string, saveFunction: () => Promise<void>, delay: number = 500) => {
-      if (saveTimersRef.current[key]) {
-        clearTimeout(saveTimersRef.current[key])
+      const existingTimer = saveTimersRef.current[key]
+      if (existingTimer) {
+        clearTimeout(existingTimer)
       }
 
       saveTimersRef.current[key] = setTimeout(async () => {

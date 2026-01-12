@@ -126,7 +126,7 @@ function ItemRow({ item, isReadOnly, onValueChange, onNameChange, onDelete }: It
 
   // Sync local value with prop
   useEffect(() => {
-    if (item.value === undefined || item.value === null) {
+    if (item.value == null) {
       setLocalValue('')
     } else {
       setLocalValue(item.value.toString())
@@ -160,7 +160,7 @@ function ItemRow({ item, isReadOnly, onValueChange, onNameChange, onDelete }: It
 
   // Format value for read-only display
   const formattedReadOnlyValue =
-    item.value === null || item.value === undefined || item.value === 0
+    item.value == null || item.value === 0
       ? '0,00'
       : item.value.toLocaleString('cs-CZ', {
           minimumFractionDigits: 2,
